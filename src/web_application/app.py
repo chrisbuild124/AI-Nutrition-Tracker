@@ -52,9 +52,6 @@ def calorie_counter_home():
         print("UNVERIFIED PAYLOAD:", decoded_unverified)
 
         return redirect(url_for("login"))
-    
-
-
 
     return render_template("calorie-counter/home.html", user=user_info)
 
@@ -62,7 +59,7 @@ def calorie_counter_home():
 def logout():
     response = make_response(render_template("logout.html"))
     response.set_cookie("jwt", "", expires=0, httponly=True, secure=False)  # set secure=True in production
-    return response
+    return redirect(url_for("welcome"))
 
 # -----------------------------
 # Run locally
