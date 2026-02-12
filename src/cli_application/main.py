@@ -7,7 +7,7 @@ BACKEND_URL = "http://localhost:7001"
 login_url = f"{BACKEND_URL}/login?app=CLI"
 print("Open this URL in your browser and log in:")
 print(login_url)
-webbrowser.open(login_url)
+# webbrowser.open(login_url)
 
 # Step 2: After login, OAuth redirects to backend and displays the JWT
 jwt_token = input("\nAfter login, copy the JWT from the browser and paste it here: ").strip()

@@ -4,6 +4,7 @@ import requests
 from dotenv import load_dotenv
 import jwt
 import datetime
+from cryptography.hazmat.primitives import serialization
 
 # -----------------------------
 # A backend microservice to authenticate users with OAuth 2.0
@@ -31,16 +32,16 @@ def get_client_credentials(client_app):
             "CLIENT_ID": os.getenv("CLI_CLIENT_ID"),
             "CLIENT_SECRET": os.getenv("CLI_CLIENT_SECRET"),
         }
-    else: # Flask
+    else: # Flask by default
         return {
             "CLIENT_ID": os.getenv("FLASK_CLIENT_ID"),
             "CLIENT_SECRET": os.getenv("FLASK_CLIENT_SECRET"),
         }
 
 # -----------------------------
-# Helper to screate a signed jwt to send user info to front end
+# Helper to screate a signed jwt to send user info to CLI
 # -----------------------------
-def create_jwt(user_info, secret_key, expires_minutes=10):
+def create_shared_jwt(user_info, secret_key, expires_minutes=10):
     """
     Creates a signed JWT with user info.
     """
@@ -52,6 +53,24 @@ def create_jwt(user_info, secret_key, expires_minutes=10):
     }
     token = jwt.encode(payload, secret_key, algorithm="HS256")
     return token
+
+# -----------------------------
+# Helper to screate a signed jwt to send user info to front end
+# -----------------------------
+def create_private_jwt(user_info, private_key, expires_minutes=10):
+    """
+    Creates a signed JWT with user info using RS256 (private/public key).
+    """
+    payload = {
+        "sub": user_info["sub"],
+        "email": user_info.get("email"),
+        "name": user_info.get("name"),
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=expires_minutes)
+    }
+    # Change algorithm to RS256 and use private key
+    token = jwt.encode(payload, private_key, algorithm="RS256")
+    return token
+
 
 # -----------------------------
 # Helper to select Auth0 credentials per client
@@ -122,16 +141,20 @@ def login():
         "client_id": creds["CLIENT_ID"],
         "redirect_uri": CALLBACK_URL,
         "scope": "openid profile email",
-        "state": f"app={client_app}"
+        "state": f"app={client_app}",
+        "prompt": "select_account"
     }
-    auth_request = requests.Request("GET", AUTH_URL, params=params).prepare()
-    print("auth_request = ", auth_request)
+    auth_request = requests.Request("GET", AUTH_URL, params=params).prepare() # AUTH_URL would be same for each user type
+    # Each user has a 1 time generated auth_request that can be used once. 
+    # Protects against CSRF/replay attacks (capturing callback url) or reusing login attempts
     return redirect(auth_request.url)
 
 @app.route("/callback")
 def callback():
+    """
+    'code' is unique 1 time code and provides access to exchange for JWT token
+    """
     code = request.args.get("code")
-    print("code = ", code)
     state = request.args.get("state")
     client_app = state.split("=")[1]
     creds = get_client_credentials(client_app)
@@ -161,7 +184,7 @@ def callback():
         print(email, name, sub)
 
         # Create JWT
-        token = create_jwt(user_info, JWT_SHARED_SECRET)
+        token = create_shared_jwt(user_info, JWT_SHARED_SECRET)
 
         # Instead of JSON, render a simple HTML page with the token
         return f"""
@@ -176,7 +199,9 @@ def callback():
 
     elif client_app == "Flask":
         # Create JWT
-        token = create_jwt(user_info, JWT_SHARED_SECRET)
+        with open("private.pem", "rb") as f:
+            private_key = serialization.load_pem_private_key(f.read(), password=None)
+        token = create_private_jwt(user_info, private_key)
         response = make_response(redirect(FRONTEND_URL))
         response.set_cookie(
             "jwt", token, httponly=True, secure=False  # secure=True in production (HTTPS)
@@ -209,6 +234,9 @@ def protected():
 
 @app.route("/userinfo")
 def userinfo():
+    """
+    Verifies the user's JWT to authorize user on system
+    """
     token = request.headers.get("Authorization")
     if not token:
         return jsonify({"success": False, "error": "Authorization header missing"}), 401
@@ -217,8 +245,5 @@ def userinfo():
     resp = requests.get(USERINFO_URL, headers=headers)
     return jsonify(resp.json())
 
-# -----------------------------
-# Run locally on port 7001
-# -----------------------------
 if __name__ == "__main__":
     app.run(port=7001, debug=True)
