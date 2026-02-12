@@ -30,6 +30,7 @@ data = response.json()  # <-- this step is missing in your code
 message = data['message']
 success = data['success']
 
+
 # Nested fields inside 'user_info'
 user_info = data['user_info']
 email = user_info['email']
