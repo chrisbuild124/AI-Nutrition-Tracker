@@ -1,68 +1,68 @@
+"""
+A front end flask service to run the calorie counter application.
+Retrieves cookie from backend as a JWT to authenticate user. 
+
+Some notes about how things are being used:
+- Flask creates the application, render_template relies in jinja2 for dynamic output 
+from static files. 
+- Proving authentication: Using jwt.
+Way 1: Used on this app. Uses JWT_PUBLIC_KEY and JWT_PRIVATE_KEY to verify user. 
+Way 2: Not used on this app. Uses JWT_SHARED_SECRET to verify user. Should only be used between backend servers. 
+
+"""
+
 from flask import Flask, redirect, request, url_for, render_template, make_response
 import jwt
-from dotenv import load_dotenv
-import requests
-import os
+import dotenv, os
 
-# -----------------------------
-# A front end flask service to run the calorie counter application.
-# Retrieves cookie from backend
-# -----------------------------
-
+dotenv.load_dotenv()
+BACKEND_URL = os.getenv("BACKEND_URL")
 app = Flask(__name__)
 
-load_dotenv()
-app.secret_key = os.getenv("FLASK_SECRET_KEY")
-JWT_SHARED_SECRET = os.getenv("JWT_SHARED_SECRET")
-BACKEND_URL = os.getenv("BACKEND_URL")
-
-# -----------------------------
+# ---------------------
 # Routes
-# -----------------------------
+# ---------------------
 @app.route("/")
 def welcome():
     return render_template("index.html")
 
 @app.route("/login")
 def login():
-    # Redirect the user to backend login page for Auth0, identifying as Flask app
     return redirect(f"{BACKEND_URL}/login?app=Flask")
     
 @app.route("/calorie-counter/home")
 def calorie_counter_home():
-    print("Secret loaded:", JWT_SHARED_SECRET)
+    """
+    Validates private/public JWT tokens and then moves user to homepage
+    """
     token = request.cookies.get("jwt")
+
     if not token:
         print("Cookie not found")
         return redirect(url_for("login"))
 
+    with open("public.pem", "rb") as f:
+        # Raw bites used in crypto encoding
+        public_key = f.read()
     try:
-        user_info = jwt.decode(token, JWT_SHARED_SECRET, algorithms=["HS256"])
+        user_info = jwt.decode(token, public_key, algorithms=["RS256"]) # "R" for decoding private/public
     except jwt.ExpiredSignatureError:
         print("JWT expired")
         return redirect(url_for("login"))
     except jwt.InvalidTokenError:
-        print("Invalid JWT")
-
-        decoded_unverified = jwt.decode(
-            token,
-            options={"verify_signature": False}
-        )
-
-        print("UNVERIFIED PAYLOAD:", decoded_unverified)
-
+        print("Invalid JWT.")
         return redirect(url_for("login"))
 
     return render_template("calorie-counter/home.html", user=user_info)
 
 @app.route("/logout")
 def logout():
+    """
+    Docstring for logout
+    """
     response = make_response(render_template("logout.html"))
     response.set_cookie("jwt", "", expires=0, httponly=True, secure=False)  # set secure=True in production
     return redirect(url_for("welcome"))
 
-# -----------------------------
-# Run locally
-# -----------------------------
 if __name__ == "__main__":
     app.run(port=8000, debug=True)
