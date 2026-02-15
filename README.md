@@ -1,4 +1,4 @@
-## Securing Oauth 2.0 to user front end
+## Securing Oauth 0 to web dev front end
 ### Web login
 Start:
 - Call URL for homepage to login
