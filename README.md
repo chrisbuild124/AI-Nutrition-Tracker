@@ -39,5 +39,5 @@ Logout
     - The advantage to using shared is it's a little simpler (among others).
     - To generate the public key and then the private key, do the following in the console:
 - Generating private/public keys:
-    - Generate a 2048-bit RSA private key openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:2048
-    - Generate the corresponding public key openssl rsa -pubout -in private.pem -out public.pem
+    - Generate a 2048-bit RSA private key `openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:2048`
+    - Generate the corresponding public key `openssl rsa -pubout -in private.pem -out public.pem`
