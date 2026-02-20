@@ -1,5 +1,7 @@
-## Securing Oauth 0 to web dev front end
-### Web login
+# Calorie-Tracker Application
+
+### Securing Oauth 0 to web dev front end
+Frontend:
 Start:
 - Call URL for homepage to login
 - Homepage is redirected to /login
@@ -33,7 +35,7 @@ Logout
 - Save over old cookie jwt as a new cookie, with it expiring immediately
 - Directs user to login page
 
-## NOTES
+# NOTES
 - Creating coookies:
     - In general, there's two types of cookie keys for a JWT: private/public and shared
     - The advantage to using shared is it's a little simpler (among others)
@@ -42,7 +44,45 @@ Logout
     - Generate a 2048-bit RSA private key `openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:2048`
     - Generate the corresponding public key `openssl rsa -pubout -in private.pem -out public.pem`
 
- ## Creating Python Virtual Environment
- - To ceate virtual environment, do `python -m .venv venv`
- - To activate virtual environment, do `source venv/bin/activate` *Note: Mac*
- - To install `requirements.txt`, do `pip freeze > requirements.txt` while inside .venv
+ ### Generating virtual environment
+Start:
+- Find desired location and do `python -m venv <filepath:usually .venv>`
+    - `-m` stands for module, and tells python to run library as a script
+Run:
+- `source <path to venv file name>/bin/activate`
+    - This runs the virtual environment
+Generate requirements.txt:
+- First, install dependencies with `pip install <module?>`
+- `pip freeze > requirements.txt` *Note:* ">" redirects output to `requirements.txt`
+- `deactivate` *Note:* Shuts down virtual environment
+
+### Flask imports
+- `Flask`: `Flask(__name__)` - __name__ is the file name - which becomes this module name
+- `redirect` - (location:URL, code=302), generates a http response object w/ URL redirect and code 302
+- `request` - Retrieves incoming request data
+    - `request.args` - URL Parameters (stuff after question mark)
+    - `get_json` - returns json data if there is any
+- `url_for` - Generate a URL to the given function route name (endpoint)
+- `render_template` - (URL, data) Sends html template + data to browser
+- `make_response` - Response object and attach headers.
+    - Usually used like: `make_response(render_template(URL, data))` then `return response`
+
+### JWT & PyJwt imports
+- JWT = Json Web Token
+- JWT accomplishes:
+    - Proves identity
+        - Since it cannot be tampered
+    - Proves permissions/roles
+        - Since it cannot be tampered
+    - Stateless verification
+        - Since it does not need to be verified on the backend server if using seperate redis database 
+- `jwt.decode()` - (token, key, algorithm=[""]) 
+    - `token` - token received
+    - `key` - key needed to unlock the algorithm
+    - `algorithm` - algorithm needed to decode
+        - RS256 = RSA + SHA-256
+        - RSA = private/public key pair
+        - SHA-256 = hash function
+- `jwt.encode()` - (token, key, algorithm=[""]) 
+    - Same arguements as above
+    - Can insert payload into encode 
