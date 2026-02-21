@@ -55,6 +55,8 @@ Generate requirements.txt:
 - First, install dependencies with `pip install <module?>`
 - `pip freeze > requirements.txt` *Note:* ">" redirects output to `requirements.txt`
 - `deactivate` *Note:* Shuts down virtual environment
+Download pip modules from requirements.txt:
+`pip install -r requirements.txt`
 
 ### Flask imports
 - `Flask`: `Flask(__name__)` - __name__ is the file name - which becomes this module name
