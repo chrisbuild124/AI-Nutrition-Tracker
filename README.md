@@ -25,6 +25,8 @@ Else:
     - Adds modules to `requirements.txt` to avoid re-installing modules
 Deactivate:
 - `deactivate` *Note:* Shuts down virtual environment
+Download pip modules from requirements.txt:
+    - `pip install -r requirements.txt`
 
 ### Flask imports
 - `Flask`: `Flask(__name__)` - __name__ is the file name - which becomes this module name
@@ -69,42 +71,8 @@ from static files.
     - `key` - key needed to unlock the algorithm
     - `algorithm` - algorithm needed to decode
         - RS256 = RSA + SHA-256
-            - RSA = private/public key pair
-            - SHA-256 = hash function
-        - Can receive payload from decode
-- `jwt.encode()` - (token, key, algorithm="") *Ex.* - `RS256`
-    - Same arguements as above, different notation
+        - RSA = private/public key pair
+        - SHA-256 = hash function
+- `jwt.encode()` - (token, key, algorithm=[""]) 
+    - Same arguements as above
     - Can insert payload into encode 
-
-### cryptography.hazmat.primitives.serialization
-- `public_key = serialization.load_pem_public_key(f.read())`
-    - `f.read()` - reads raw bytes from public file
-    - `serialization.load_pem_public_key` - converts bytes to python object
-        - Format includes -----BEGIN PUBLIC KEY-----
-- `serialization.load_pem_private_key(f.read(), password=None)`
-    - `password=None` - Unencrypted file
-    - Rest same as above
-
-### datetime.timezone
-- `"exp": datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(minutes=expires_minutes)`
-    - `datetime.datetime.now(tz=timezone.utc)` - Gets current time in UTC
-    - `datetime.timedelta(minutes=expires_minutes)` - Creates time difference of `expires_minutes`
-
-### Requests
-- `requests.Request(method, url, optional:params, optional:headers, optional:json, optional:data, optional:cookies, **kwargs).prepare()` General request object form, could use request.<operation> instead
-    - `method` - "GET", "POST", "PUT", "DELETE"
-        - A way to organize what happens, just another parameter for the backend
-            - Could be enforced by `method` in backend
-        - "GET" - Used to send data in url (could do body but not practice)
-        - "POST" - Used to send data in body
-        - "POST" - Used to send data in body
-        - "DELETE" - Usually either
-    - `url` - URL (string in python)
-    - `params` - parameters in URL seperated by & (dictionary in python)
-    - `headers` - tells info about request, example: {"Content-Type": "application/json"}
-    - `json` - JSON in body (JSON object in python)
-    - `data` - Raw bites in body
-    - `cookies` - Coookie objects to send
-    - `prepare()` - Builds URL before sending
-
-### Additional documentation on the backend identity/authentication system: [Auth0 Backend Login Service](https://github.com/chrisbuild124/0Auth_Backend_Login_Service)
