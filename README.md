@@ -4,6 +4,18 @@
 ### Overview
 - 
 
+### Microservices 
+
+Currently Utilized:
+- Auth0 Authenticator
+
+Future Utilization:
+- Backend JWT verification
+- Redis cache verification
+- Quote Generator
+- Unit Conversion
+- OpenAI calorie estimator
+
 # NOTES
 ### Cookies
 - Cookie expiration is different than JWT expiration

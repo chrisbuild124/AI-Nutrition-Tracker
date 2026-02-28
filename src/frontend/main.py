@@ -18,7 +18,7 @@ def main():
     new_profile.gender = input("What is your gender? ")
     new_profile.activity_level = input("What is your activity level per week? ")
     new_profile.goals = input("What is your weight goal? ")
-    print("The amount of calories you need to eat per day for the next 2 months to get to weight 175 is 1950.")
+    print(f"The amount of calories you need to eat per day for the next 2 months to get to weight {new_profile.goals} is 1950.")
     input("Calories eaten 7 days ago: ")
     input("Calories eaten 6 days ago: ")
     input("Calories eaten 5 days ago: ")
