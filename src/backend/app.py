@@ -32,7 +32,7 @@ def update_JWT_token_backend():
     """
     token = request.headers.get("Authorization")
     headers = {"Authorization": token}
-    redis_resp = requests.get(f"{BACKEND_REDIS_URL}/update_JWT_token", headers=headers)
+    redis_resp = requests.get(f"{BACKEND_REDIS_URL}/update_session", headers=headers)
     return make_response(redis_resp.content, redis_resp.status_code, {"Content-Type": "application/json"})
 
 @app.route("/logout")
@@ -40,9 +40,10 @@ def logout():
     """
     Invalidates the JWT token in Redis database
     """
-    token = request.cookies.get("jwt_calorie_counter_profile")
+    token = request.headers.get("Authorization")
     headers = {"Authorization": token}
-    requests.post(f"{BACKEND_REDIS_URL}/remove_JWT_token", headers=headers)
+    resp = requests.get(f"{BACKEND_REDIS_URL}/delete_session", headers=headers)
+    return make_response(resp.content, resp.status_code, {"Content-Type": "application/json"})
 
 # Initialize application
 if __name__ == "__main__":

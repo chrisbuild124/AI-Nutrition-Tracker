@@ -35,7 +35,6 @@ def calorie_counter_home():
     Renders homepage
     Talks to calorie tracker backend
     """
-    print('test')
     token = request.cookies.get("jwt_calorie_counter_profile")
     if not token:
         print("Cookie not found")
@@ -62,7 +61,7 @@ def logout():
         print("Cookie not found")
         return redirect(url_for("frontend_home"))
     headers = {"Authorization": token}
-    requests.post(f"{BACKEND_URL}/logout", headers=headers) # If invalid, will continue anyway
+    response = requests.get(f"{BACKEND_URL}/logout", headers=headers) # If invalid, will continue anyway
 
     # Inserts invalid cookie into browser and redirects
     response = make_response(redirect(url_for("frontend_home")))
