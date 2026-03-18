@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeightTrack - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <img src="/static/ProjectLogoDashboardProfile.png" alt="WeightTrack Logo" class="logo-image" id="logo">
+            <h1 class="page-title">Dashboard</h1>
+            <div class="header-buttons">
+                <button class="profile-btn" id="profileBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="profile-panel">
+                <h2>Profile</h2>
+                <div class="profile-info">
+                    <div class="info-item">
+                        <span class="info-label">Weight:</span>
+                        <span class="info-value" id="displayWeight">180 lbs</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Age:</span>
+                        <span class="info-value" id="displayAge">28 years</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Gender:</span>
+                        <span class="info-value" id="displayGender">Male</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Weight Goal:</span>
+                        <span class="info-value" id="displayWeightGoal">165 lbs</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Activity Level/Week:</span>
+                        <span class="info-value" id="displayActivityLevel">5 days</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Calories Needed Per Day:</span>
+                        <span class="info-value" id="displayCaloriesNeeded">2200 kcal</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calorie-graph-panel">
+                <h2>Calorie Graph</h2>
+                <div class="graph-placeholder">
+                    Graph will be rendered here via matplotlib
+                </div>
+            </div>
+        </div>
+
+        <div class="entries-section">
+            <div class="entries-panel">
+                <h2>Entries</h2>
+                
+                <div class="controls-row">
+                    <div class="date-navigation">
+                        <button class="nav-btn" id="prevDay">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <span class="current-date" id="currentDate">03/16/2026</span>
+                        <button class="nav-btn" id="nextDay">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search food to log..." class="search-input" />
+                        <button class="search-btn" id="searchBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="entries-list" id="entriesList">
+                    <div class="no-entries">No entries for this day yet. Search or add manually to log food.</div>
+                </div>
+
+                <div class="total-calories">
+                    <h3>Total Calories: <span id="totalCalories">0</span> cal</h3>
+                </div>
+
+                <div class="manual-entry">
+                    <h3>Manual Entry</h3>
+                    <input type="text" id="manualName" placeholder="Food Name" />
+                    <input type="number" id="manualCalories" placeholder="Calories" />
+                    <button id="manualEntryBtn">Add Entry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const USER_ID = "{{ user_id or '' }}";</script>
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

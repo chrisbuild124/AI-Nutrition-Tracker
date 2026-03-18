@@ -1,5 +1,11 @@
 # Calorie-Tracker Application
 - Reach your full physical potential using our calorie tracking application!
+- Use it to:
+    - Track daily calories
+        - Optionally: Reach your goal using our built in OpenAI calorie calculator
+    - Track weight progress
+    - Add calories to 
+    - 
 
 ### Overview
 - 

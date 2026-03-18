@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeightTrack - Edit Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <header class="edit-profile-header">
+            <img src="/static/ProjectLogoDashboardProfile.png" alt="WeightTrack Logo" class="logo-image" id="logo">
+            <h1 class="page-title">Edit Profile</h1>
+            <div class="header-buttons">
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <div class="edit-profile-content">
+            <div class="edit-profile-card">
+                <div class="directions-header">
+                    Update your profile information below
+                </div>
+
+                <form class="edit-profile-form" id="profileForm">
+                    <div class="form-field">
+                        <label class="form-label">Height:</label>
+                        <input type="text" id="editHeight" class="form-input" />
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Weight:</label>
+                        <input type="text" id="editWeight" class="form-input" />
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Age:</label>
+                        <input type="text" id="editAge" class="form-input" />
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Gender:</label>
+                        <input type="text" id="editGender" class="form-input" />
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Weight Goal:</label>
+                        <input type="text" id="editWeightGoal" class="form-input" />
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Activity Level/Week:</label>
+                        <input type="text" id="editActivityLevel" class="form-input" />
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Calories Needed Per Day:</label>
+                        <input type="text" id="editCaloriesNeeded" class="form-input" />
+                    </div>
+
+                    <div class="form-field full-width">
+                        <button type="button" class="cancel-btn" id="cancelProfileBtn">Cancel</button>
+                        <button type="submit" class="save-btn" id="saveProfileBtn">Save Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='edit-profile.js') }}"></script>
+</body>
+</html>
