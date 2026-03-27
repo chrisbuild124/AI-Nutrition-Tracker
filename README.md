@@ -1,8 +1,9 @@
 # Calorie-Tracker Application
 
-- NOTE: This repository is in progress. Everything below the alpha video needs to be re-organized.
-Demo video link: 
+- NOTE: This repository is in progress. Everything below the demo needs to be re-organized (including the video itself).
+Demo video: 
 [![Watch the demo](https://img.youtube.com/vi/1QozKmgsmVU/maxresdefault.jpg)](https://www.youtube.com/watch?v=1QozKmgsmVU)
+---
 
 - Reach your full physical potential using our calorie tracking application!
 - Use it to:
