@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, redirect, url_for, make_response, request
 import requests
+from graph import generate_calorie_graph
 
 # -----------------------------
 # A backend flask service to run the calorie counter application.
@@ -17,6 +18,7 @@ DEBUG_MODE = True
 BACKEND_LOGIN_URL = 'http://localhost:7001'
 BACKEND_REDIS_URL = 'http://localhost:7002'
 BACKEND_OPENAI_URL = 'http://localhost:7023'
+BACKEND_CALORIE_URL = 'http://localhost:7003'
 app = Flask(__name__)
 
 # ---------------------
@@ -59,6 +61,19 @@ def openAICalc():
     resp = requests.post(f"{BACKEND_OPENAI_URL}/count-calories", json=data)
     data = resp.json()
     return jsonify(data), resp.status_code
+
+@app.route("/get_calorie_graph")
+def get_calorie_graph():
+    user_id = request.args.get('user_id')
+    selected_date = request.args.get('date')
+
+    resp = requests.get(f"{BACKEND_CALORIE_URL}/get_calories", params={'user_id': user_id})
+    entries = resp.json()
+    print("GRAPH ENTRIES:", entries)
+    print("SELECTED DATE:", selected_date)
+
+    img_base64 = generate_calorie_graph(entries, selected_date)
+    return jsonify({'image': img_base64})
 
 if __name__ == "__main__":
     app.run(port=PORT, debug=DEBUG_MODE)

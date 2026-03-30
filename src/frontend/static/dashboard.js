@@ -59,8 +59,21 @@ function updateDateDisplay() {
   if (dateEl) {
     dateEl.textContent = month + '/' + day + '/' + year;
   }
-  // TODO: Load entries for this date from backend
   loadEntriesForDate();
+  updateGraph();
+}
+
+function updateGraph() {
+  const formattedDate = getLocalDateString();
+  fetch(`/get_calorie_graph?date=${formattedDate}&user_id=${USER_ID}`)
+    .then(res => res.json())
+    .then(data => {
+      const graphEl = document.getElementById('calorieGraph');
+      if (graphEl && data.image) {
+        graphEl.src = 'data:image/png;base64,' + data.image;
+      }
+    })
+    .catch(err => console.error('Error loading graph:', err));
 }
 
 function changeDate(days) {
@@ -143,6 +156,7 @@ function deleteEntry(id) {
 
     renderEntries();
     updateTotalCalories();
+    updateGraph();
   })
   .catch(err => {
     console.error('Error deleting entry:', err);
@@ -186,6 +200,7 @@ function addEntry(name, calories) {
     dailyEntries.push(newEntry);
     renderEntries();
     updateTotalCalories();
+    updateGraph();
   })
   .catch(err => {
     console.error('Error adding entry:', err);

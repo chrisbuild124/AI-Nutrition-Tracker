@@ -93,6 +93,13 @@ def logout():
 # ---------------------
 # Routes - Handles API calls
 # ---------------------
+@app.route("/get_calorie_graph")
+def get_calorie_graph():
+    user_id = request.args.get('user_id')
+    date = request.args.get('date')
+    resp = requests.get(f"{BACKEND_URL}/get_calorie_graph", params={'user_id': user_id, 'date': date})
+    return jsonify(resp.json()), resp.status_code
+
 @app.route("/get_calories")
 def get_calories():
     date = request.args.get('date')
