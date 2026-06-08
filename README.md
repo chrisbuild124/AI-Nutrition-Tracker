@@ -1,6 +1,6 @@
 # Calorie-Tracker Application
 
-- NOTE: This repository is in progress. Everything below the demo needs to be re-organized (including the video itself).
+- NOTE: This repository is in progress.
 Demo video: 
 [![Watch the demo](https://img.youtube.com/vi/1QozKmgsmVU/maxresdefault.jpg)](https://www.youtube.com/watch?v=1QozKmgsmVU)
 ---
@@ -14,19 +14,19 @@ Demo video:
     - 
 
 ### Overview
-- 
 
 ### Microservices 
 
 Currently Utilized:
 - Auth0 Authenticator
-
-Future Utilization:
 - Backend JWT verification
 - Redis cache verification
+- OpenAI calorie estimator
+
+Future Utilization:
+
 - Quote Generator
 - Unit Conversion
-- OpenAI calorie estimator
 
 # NOTES
 ### Cookies
