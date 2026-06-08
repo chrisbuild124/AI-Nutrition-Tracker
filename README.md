@@ -10,8 +10,6 @@ Demo video:
     - Track daily calories
         - Optionally: Reach your goal using our built in OpenAI calorie calculator
     - Track weight progress
-    - Add calories to 
-    - 
 
 ### Overview
 
